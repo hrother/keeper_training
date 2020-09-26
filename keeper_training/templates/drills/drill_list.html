@@ -4,27 +4,37 @@
 
 {% block content %}
 <div class="container">
-    <div class="row"><h2>Drills</h2></div>
     <div class="row">
+        <div class="col">
+            <h2>Drills</h2>
+        </div>
+        <div class="col"><a href="{% url 'drills:add' %}" class="btn btn-success">New</a></div>
+
+    </div>
+    <hr>
+    <div class="row">
+        <div class="card-deck">
             {% for drill in drill_list %}
-            <div class="col">
-                <div class="card mb-3" style="max-width: 540px;">
-                    <a href="{{ drill.get_absolute_url }}"> 
-                    <div class="row no-gutters">
-                    <div class="col-md-4">
-                        <img src="{{drill.image.url}}" class="card-img" alt="Image of drill">
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
-                        <h5 class="card-title">{{ drill.name }}</h5>
-                        <p class="card-text">{{ drill.description }}</p>
-                        <p class="card-text"><small class="text-muted">{% trans "Last updated." %} {{ drill.modified | timesince }}</small></p>
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col">
+                            <h5 class="card-title">{{drill.name}}</h5>
                         </div>
+                        <div class="col"><a href="{% url 'drills:update' drill.slug %}"
+                                class="btn btn-outline-info float-right">Edit</a></div>
                     </div>
-                    </div>
-                </a>
                 </div>
-            
+                <img src="{{drill.image_url|default_if_none:'#' }}" class="card-img-top" alt="Image of drill">
+                <hr>
+                <div class="card-body">
+                    <p class="card-text">{{drill.description}}</p>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted">{% trans "Last updated." %}
+                        {{ drill.modified | timesince }}</small>
+                </div>
+            </div>
             {% endfor %}
         </div>
     </div>

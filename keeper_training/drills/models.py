@@ -13,6 +13,11 @@ class Drill(TimeStampedModel):
     description = models.TextField(null=True, blank=True)
     image = models.ImageField(null=True, blank=True)
 
+    @property
+    def image_url(self):
+        if self.image:
+            return self.image.url
+
     def get_absolute_url(self):
         """Get url for drill's detail view.
 
