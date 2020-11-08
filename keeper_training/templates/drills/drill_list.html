@@ -8,14 +8,14 @@
         <div class="col">
             <h2>Drills</h2>
         </div>
-        <div class="col"><a href="{% url 'drills:add' %}" class="btn btn-success">New</a></div>
+        <div class="col"><a href="{% url 'drills:add' %}" class="btn btn-success float-right">New</a></div>
 
     </div>
     <hr>
-    <div class="row">
-        <div class="card-deck">
-            {% for drill in drill_list %}
-            <div class="card">
+    <div class="row row-cols-1 row-cols-md-3">
+        {% for drill in drill_list %}
+        <div class="col mb-4">
+            <div class="card h-100">
                 <div class="card-header">
                     <div class="row">
                         <div class="col">
@@ -35,8 +35,8 @@
                         {{ drill.modified | timesince }}</small>
                 </div>
             </div>
-            {% endfor %}
         </div>
+        {% endfor %}
     </div>
 </div>
 {% endblock content %}
