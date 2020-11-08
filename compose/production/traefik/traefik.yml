@@ -24,7 +24,7 @@ http:
   routers:
     web-router:
       rule: "Host(`hrother.org`) || Host(`www.hrother.org`)"
-      
+
       entryPoints:
         - web
       middlewares:
@@ -34,7 +34,7 @@ http:
 
     web-secure-router:
       rule: "Host(`hrother.org`) || Host(`www.hrother.org`)"
-      
+
       entryPoints:
         - web-secure
       middlewares:

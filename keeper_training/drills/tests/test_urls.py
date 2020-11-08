@@ -13,9 +13,9 @@ def test_list_resolves() -> None:
 
 def test_detail_reverse() -> None:
     """Reverse drills:detail to /drills/<slug>/."""
-    assert reverse("drills:detail", kwargs={"slug": "slug"}) == f"/drills/slug/"
+    assert reverse("drills:detail", kwargs={"slug": "slug"}) == "/drills/slug/"
 
 
 def test_detail_resolve() -> None:
     """IT resolves /drills/slug/ to drills:detail."""
-    assert resolve(f"/drills/slug/").view_name == "drills:detail"
+    assert resolve("/drills/slug/").view_name == "drills:detail"

@@ -26,7 +26,6 @@ class Drill(TimeStampedModel):
         """
         return reverse("drills:detail", kwargs={"slug": self.slug})
 
-
     def __str__(self) -> str:
         """String representation of a drill."""
         return str(self.slug)
