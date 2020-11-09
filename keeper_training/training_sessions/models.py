@@ -12,3 +12,6 @@ class TrainingSession(TimeStampedModel):
 
     def get_absolute_url(self) -> str:
         return reverse("sessions:detail", kwargs={"pk": self.pk})
+
+    def get_update_url(self) -> str:
+        return reverse("sessions:update", kwargs={"pk": self.pk})

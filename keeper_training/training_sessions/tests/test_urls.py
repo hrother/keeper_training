@@ -31,3 +31,13 @@ def test_detail_reverses() -> None:
 def test_detail_resolves() -> None:
     """It resovles /sessions/slug/ to sessions:detail."""
     assert resolve("/sessions/1/").view_name == "sessions:detail"
+
+
+def test_update_reverses() -> None:
+    """It reverses sessions:update to /sessions/<pk>/update."""
+    assert reverse("sessions:update", kwargs={"pk": "1"}) == "/sessions/1/update"
+
+
+def test_edit_resolves() -> None:
+    """It resolves /sessions/<pk>/update to session:update."""
+    assert resolve("/sessions/1/update").view_name == "sessions:update"
