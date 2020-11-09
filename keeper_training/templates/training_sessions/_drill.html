@@ -1,0 +1,13 @@
+{% load i18n %}
+
+<div class="card h-100" style="width: 16rem;">
+    <img src="{{drill.image_url|default_if_none:'#' }}" class="card-img-top" alt="Image of drill">
+    <div class="card-body">
+        <h5 class="card-title">{{drill.name}}</h5>
+        <p class="card-text">{{drill.description}}</p>
+    </div>
+    <!-- <div class="card-footer">
+        <small class="text-muted">{% trans "Last updated." %}
+            {{ drill.modified | timesince }}</small>
+    </div> -->
+</div>

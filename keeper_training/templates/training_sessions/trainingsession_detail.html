@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}Session{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <h2>Session</h2>
+    </div>
+    <div class="row row-cols-1 row-cols-md-2">
+        {% for drill in trainingsession.drills.all %}
+        <div class="col mb-4">
+            {% include "drills/_drill.html" %}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}

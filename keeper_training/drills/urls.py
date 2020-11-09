@@ -1,11 +1,9 @@
 from django.urls import path
 
-from .views import (
-    drill_create_view,
-    drill_detail_view,
-    drill_list_view,
-    drill_update_view,
-)
+from .views import drill_create_view
+from .views import drill_detail_view
+from .views import drill_list_view
+from .views import drill_update_view
 
 app_name = "drills"
 urlpatterns = [

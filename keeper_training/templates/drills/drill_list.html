@@ -15,26 +15,7 @@
     <div class="row row-cols-1 row-cols-md-3">
         {% for drill in drill_list %}
         <div class="col mb-4">
-            <div class="card h-100">
-                <div class="card-header">
-                    <div class="row">
-                        <div class="col">
-                            <h5 class="card-title">{{drill.name}}</h5>
-                        </div>
-                        <div class="col"><a href="{% url 'drills:update' drill.slug %}"
-                                class="btn btn-outline-info float-right">Edit</a></div>
-                    </div>
-                </div>
-                <img src="{{drill.image_url|default_if_none:'#' }}" class="card-img-top" alt="Image of drill">
-                <hr>
-                <div class="card-body">
-                    <p class="card-text">{{drill.description}}</p>
-                </div>
-                <div class="card-footer">
-                    <small class="text-muted">{% trans "Last updated." %}
-                        {{ drill.modified | timesince }}</small>
-                </div>
-            </div>
+            {% include "drills/_drill.html" %}
         </div>
         {% endfor %}
     </div>
