@@ -5,11 +5,9 @@ from django.test import RequestFactory
 
 from keeper_training.users.models import User
 from keeper_training.users.tests.factories import UserFactory
-from keeper_training.users.views import (
-    UserRedirectView,
-    UserUpdateView,
-    user_detail_view,
-)
+from keeper_training.users.views import user_detail_view
+from keeper_training.users.views import UserRedirectView
+from keeper_training.users.views import UserUpdateView
 
 pytestmark = pytest.mark.django_db
 

@@ -1,7 +1,9 @@
-from typing import Any, Sequence
+from typing import Any
+from typing import Sequence
 
 from django.contrib.auth import get_user_model
-from factory import Faker, post_generation
+from factory import Faker
+from factory import post_generation
 from factory.django import DjangoModelFactory
 
 

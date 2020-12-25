@@ -1,3 +1,5 @@
+import typing
+
 from autoslug import AutoSlugField
 from django.db import models
 from django.urls import reverse
@@ -14,11 +16,12 @@ class Drill(TimeStampedModel):
     image = models.ImageField(null=True, blank=True)
 
     @property
-    def image_url(self):
+    def image_url(self) -> typing.Optional[str]:
         if self.image:
             return self.image.url
+        return None
 
-    def get_absolute_url(self):
+    def get_absolute_url(self) -> str:
         """Get url for drill's detail view.
 
         Returns:

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}Training Sessions{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col">
+        <h2>Training Sessions</h2>
+    </div>
+    <div class="col"><a href="{% url 'sessions:add' %}" class="btn btn-success float-right">New</a></div>
+</div>
+<hr>
+{% for session in trainingsession_list %}
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col">
+                <h3><a href="{{session.get_absolute_url}} ">Session - {{session.pk}}</a>
+                </h3>
+            </div>
+            <div class="col">
+                <a href="{{session.get_update_url}}" class="btn btn-info float-right">Edit</a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="row">
+            {% for drill in session.drills.all %}
+            <div class="col">
+                {% include "training_sessions/_drill.html" %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<br>
+{% endfor %}
+
+{% endblock content %}
