@@ -5,11 +5,11 @@
 {% block content %}
 <div class="container">
     <div class="row">
-        <h2>Session</h2>
+        <h2>Training Session - {{trainingsession.date}}</h2>
     </div>
     <div class="row row-cols-1 row-cols-md-2">
-        {% for drill in trainingsession.drills.all %}
-        <div class="col mb-4">
+        {% for drill, order in ordered_drills %}
+        <div class="col mb-4 order-{{order}}">
             {% include "drills/_drill.html" %}
         </div>
         {% endfor %}

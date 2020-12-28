@@ -1,3 +1,6 @@
+from typing import Any
+from typing import Dict
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.query import QuerySet
 from django.forms.models import BaseModelForm
@@ -10,7 +13,7 @@ from django.views.generic import UpdateView
 from .models import TrainingSession
 
 
-class TrainingSessionListView(ListView):
+class TrainingSessionListView(LoginRequiredMixin, ListView):
     model = TrainingSession
     allow_empty = True
 
@@ -22,7 +25,10 @@ class TrainingSessionListView(ListView):
 
 class TrainingSessionCreateView(LoginRequiredMixin, CreateView):
     model = TrainingSession
-    fields = ("drills",)
+    fields = (
+        "date",
+        "drills",
+    )
 
     def form_valid(self, form: BaseModelForm) -> HttpResponse:
         form.instance.coach = self.request.user
@@ -31,7 +37,10 @@ class TrainingSessionCreateView(LoginRequiredMixin, CreateView):
 
 class TrainingSessionUpdateView(LoginRequiredMixin, UpdateView):
     model = TrainingSession
-    fields = ("drills",)
+    fields = (
+        "date",
+        "drills",
+    )
 
     def form_valid(self, form: BaseModelForm) -> HttpResponse:
         form.instance.coach = self.request.user
@@ -40,6 +49,14 @@ class TrainingSessionUpdateView(LoginRequiredMixin, UpdateView):
 
 class TrainingSessionDetailView(LoginRequiredMixin, DetailView):
     model = TrainingSession
+
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["ordered_drills"] = [
+            (sd.drill, sd.order) for sd in self.get_object().sessiondrills_set.all()
+        ]
+        print(context["ordered_drills"])
+        return context
 
 
 training_session_list_view = TrainingSessionListView.as_view()

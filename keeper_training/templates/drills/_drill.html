@@ -1,5 +1,4 @@
 {% load i18n %}
-
 <div class="card h-100">
     <div class="card-header">
         <div class="row">
@@ -16,7 +15,7 @@
         <p class="card-text">{{drill.description}}</p>
     </div>
     <div class="card-footer">
-        <small class="text-muted">{% trans "Last updated." %}
-            {{ drill.modified | timesince }}</small>
+        <small class="text-muted">{% trans "Duration:" %}
+            {{ drill.duration }}</small>
     </div>
 </div>

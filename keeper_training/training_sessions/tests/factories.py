@@ -10,6 +10,7 @@ class TrainingSessionFactory(DjangoModelFactory):
     class Meta:
         model = TrainingSession
 
+    date = factory.Faker("date_object")
     coach = factory.SubFactory(UserFactory)
 
     @factory.post_generation

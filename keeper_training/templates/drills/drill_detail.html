@@ -3,19 +3,5 @@
 {% block title %}Drills{% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="row"><h2>{{drill.name}}</h2></div>
-    <div class="row">
-
-        <div class="col-md-4">
-            {% if drill.image %}
-            <img src="{{ drill.image.url }}" class="rounded float-left img-fluid"  alt="Image of drill">
-            <!-- <img src="{[drill.image.url}}" alt=""> -->
-            {% endif %}
-        </div>
-        <div class="col">
-            <p>{{drill.description}}</p>
-        </div>
-    </div>
-</div>
+{% include "drills/_drill.html" %}
 {% endblock content %}
