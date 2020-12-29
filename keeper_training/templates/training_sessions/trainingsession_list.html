@@ -24,12 +24,13 @@
         </div>
     </div>
     <div class="card-body">
-
-        <div class="row">
-            {% for drill in session.drills.all %}
-            <div class="col">
+        <div class="row row-cols-4">
+            {% for sd in session.sessiondrills_set.all %}
+            {% with drill=sd.drill %}
+            <div class="col mb-4">
                 {% include "training_sessions/_drill.html" %}
             </div>
+            {% endwith %}
             {% endfor %}
         </div>
     </div>

@@ -3,6 +3,7 @@ from typing import Any
 from typing import Dict
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db import models
 from django.db.models.query import QuerySet
 from django.forms.models import BaseModelForm
 from django.http.response import HttpResponse
@@ -23,7 +24,12 @@ class TrainingSessionListView(LoginRequiredMixin, ListView):
     allow_empty = True
 
     def get_queryset(self) -> QuerySet:
-        qs = super().get_queryset().select_related("coach").prefetch_related("drills")
+        qs = (
+            super()
+            .get_queryset()
+            .select_related("coach")
+            .prefetch_related("sessiondrills_set__drill")
+        )
         qs = qs.filter(coach=self.request.user)
         return qs
 
@@ -55,12 +61,14 @@ class TrainingSessionUpdateView(LoginRequiredMixin, UpdateView):
 class TrainingSessionDetailView(LoginRequiredMixin, DetailView):
     model = TrainingSession
 
+    def get_queryset(self) -> models.query.QuerySet:
+        return super().get_queryset().prefetch_related("sessiondrills_set__drill")
+
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context["ordered_drills"] = [
-            (sd.drill, sd.order) for sd in self.get_object().sessiondrills_set.all()
+            sd.drill for sd in context["object"].sessiondrills_set.all()
         ]
-        print(context["ordered_drills"])
         return context
 
 
