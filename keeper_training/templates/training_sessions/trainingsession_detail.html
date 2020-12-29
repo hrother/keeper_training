@@ -7,13 +7,15 @@
     <div class="row">
         <h2>Training Session - {{trainingsession.date}}</h2>
     </div>
+    <br>
     <div id="drill-grid" class="row row-cols-1 row-cols-md-2">
         {% for drill, order in ordered_drills %}
-        <div class="col mb-4" data-id="{{drill.pk}}">
+        <div class="col mb-4 " data-id="{{drill.pk}}">
             {% include "drills/_drill.html" %}
         </div>
         {% endfor %}
     </div>
+    <br>
 </div>
 {% csrf_token %}
 {% endblock content %}

@@ -6,6 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.query import QuerySet
 from django.forms.models import BaseModelForm
 from django.http.response import HttpResponse
+from django.http.response import HttpResponseServerError
 from django.http.response import JsonResponse
 from django.views.generic import CreateView
 from django.views.generic import DetailView
@@ -65,13 +66,19 @@ class TrainingSessionDetailView(LoginRequiredMixin, DetailView):
 
 class TrainingSessionReorderView(LoginRequiredMixin, View):
     def post(self, request, pk):
-        if request.method == "POST":
-            drills = json.loads(request.body)
+        if request.method == "POST" and request.is_ajax():
+            try:
+                drills = json.loads(request.body)
+            except json.JSONDecodeError as e:
+                return HttpResponseServerError(str(e))
+
             for idx, drill_pk in enumerate(drills, start=1):
                 sd = SessionDrills.objects.get(drill=drill_pk, session=pk)
                 sd.order = idx
                 sd.save()
-        return JsonResponse({"success": True}, status=200)
+            return JsonResponse({"success": True}, status=200)
+        else:
+            return JsonResponse({"success": False}, status=400)
 
 
 training_session_list_view = TrainingSessionListView.as_view()
