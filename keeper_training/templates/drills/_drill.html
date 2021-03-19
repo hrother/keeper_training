@@ -5,8 +5,9 @@
             <div class="col">
                 <h5 class="card-title">{{drill.name}}</h5>
             </div>
-            <div class="col"><a href="{% url 'drills:update' drill.slug %}"
-                    class="btn btn-outline-info float-right">Edit</a></div>
+            <div class="col">
+                <a href="{% url 'drills:update' drill.slug %}" class="btn btn-outline-info float-right">Edit</a>
+            </div>
         </div>
     </div>
     <img src="{{drill.image_url|default_if_none:'#' }}" class="card-img-top" alt="Image of drill">

@@ -17,6 +17,7 @@ from django.views.generic.base import View
 
 from .models import SessionDrills
 from .models import TrainingSession
+from keeper_training.drills.models import Drill
 
 
 class TrainingSessionListView(LoginRequiredMixin, ListView):
@@ -41,6 +42,12 @@ class TrainingSessionCreateView(LoginRequiredMixin, CreateView):
         "drills",
     )
 
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        ctx = super().get_context_data(**kwargs)
+        ctx["action"] = "Create"
+        ctx["all_drills"] = Drill.objects.all()
+        return ctx
+
     def form_valid(self, form: BaseModelForm) -> HttpResponse:
         form.instance.coach = self.request.user
         return super().form_valid(form)
@@ -52,6 +59,23 @@ class TrainingSessionUpdateView(LoginRequiredMixin, UpdateView):
         "date",
         "drills",
     )
+
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        ctx = super().get_context_data(**kwargs)
+        ctx["action"] = "Update"
+        ctx["ordered_drills"] = [
+            sd.drill for sd in ctx["object"].sessiondrills_set.all()
+        ]
+        ctx["all_drills"] = Drill.objects.exclude(
+            pk__in=[d.pk for d in ctx["ordered_drills"]]
+        )
+        return ctx
+
+    def get_form_kwargs(self):
+        """Return the keyword arguments for instantiating the form."""
+        kwargs = super().get_form_kwargs()
+        print(kwargs)
+        return kwargs
 
     def form_valid(self, form: BaseModelForm) -> HttpResponse:
         form.instance.coach = self.request.user

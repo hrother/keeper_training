@@ -1,12 +1,88 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 
-{% block title %}New session{% endblock title %}
+{% block title %}{{action}} session{% endblock title %}
 {% block content %}
-<h2>Create a new session</h2>
-<form class="form" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{form | crispy}}
-    <button type="submit" , class="btn btn-success">Submit</button>
-</form>
+<div class="container-fluid">
+    <h1>{{action}} session </h1>
+    <div class="row">
+        <div class="card col">
+            <h2>Available drills</h2>
+            <div id="all-drills-grid" class="row row-cols-1 row-cols-md-2">
+                {% for drill in all_drills %}
+                <div class="col mb-4 " data-id="{{drill.pk}}">
+                    {% include "drills/_drill.html" %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col card bg-light">
+            <h2>Selected drills</h2>
+
+            <form class="form" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{form | crispy}}
+                <div id="selected-drills" class="row row-cols-1 row-cols-md-2">
+                    {% for drill in ordered_drills %}
+                    <div class="col mb-4 " data-id="{{drill.pk}}">
+                        {% include "drills/_drill.html" %}
+                    </div>
+                    {% endfor %}
+                </div>
+                <button type="submit" , class="btn btn-success">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% csrf_token %}
 {% endblock content %}
+
+{% block javascript %}
+{{ block.super }}
+<script src="http://SortableJS.github.io/Sortable/Sortable.js"></script>
+<script>
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    // Ensure jQuery AJAX calls set the CSRF header to prevent security errors
+    $.ajaxSetup({
+        beforeSend: function (xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+    new Sortable(document.getElementById("all-drills-grid"), {
+        group: "shared",
+
+        animation: 150,
+        mutliDrag: true,
+        chosenClass: "border-info",
+        fallbackTolerance: 3
+    });
+    const selected = new Sortable(document.getElementById("selected-drills"), {
+        group: "shared",
+        store: {
+            /**
+             * Save the order of elements. Called onEnd (when the item is dropped).
+             * @param {Sortable}  sortable
+             */
+            set: function (sortable) {
+                var order = sortable.toArray();
+                for (const option of document.querySelectorAll('#id_drills option')) {
+                    const value = option.value;
+
+                    if (order.indexOf(value) !== -1) {
+                        option.setAttribute('selected', 'selected');
+                    }
+                    else {
+                        option.removeAttribute('selected')
+                    }
+                }
+            }
+        },
+    });
+</script>
+{% endblock javascript %}
