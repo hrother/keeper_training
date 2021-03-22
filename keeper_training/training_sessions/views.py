@@ -1,10 +1,13 @@
 import json
 from typing import Any
 from typing import Dict
+from typing import Optional
+from typing import Type
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import models
 from django.db.models.query import QuerySet
+from django.forms.forms import BaseForm
 from django.forms.models import BaseModelForm
 from django.http.response import HttpResponse
 from django.http.response import HttpResponseServerError
@@ -18,6 +21,7 @@ from django.views.generic.base import View
 from .models import SessionDrills
 from .models import TrainingSession
 from keeper_training.drills.models import Drill
+from keeper_training.training_sessions.forms import TrainingSessionForm
 
 
 class TrainingSessionListView(LoginRequiredMixin, ListView):
@@ -37,10 +41,7 @@ class TrainingSessionListView(LoginRequiredMixin, ListView):
 
 class TrainingSessionCreateView(LoginRequiredMixin, CreateView):
     model = TrainingSession
-    fields = (
-        "date",
-        "drills",
-    )
+    form_class = TrainingSessionForm
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         ctx = super().get_context_data(**kwargs)
@@ -55,10 +56,7 @@ class TrainingSessionCreateView(LoginRequiredMixin, CreateView):
 
 class TrainingSessionUpdateView(LoginRequiredMixin, UpdateView):
     model = TrainingSession
-    fields = (
-        "date",
-        "drills",
-    )
+    form_class = TrainingSessionForm
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         ctx = super().get_context_data(**kwargs)
@@ -71,10 +69,18 @@ class TrainingSessionUpdateView(LoginRequiredMixin, UpdateView):
         )
         return ctx
 
+    def get_form(self, form_class: Optional[Type[BaseForm]] = None) -> BaseForm:
+        form = super().get_form(form_class=form_class)
+        print(form.is_valid())
+        # form.fields["drills"].widget = HiddenInput()
+        return form
+
     def get_form_kwargs(self):
         """Return the keyword arguments for instantiating the form."""
         kwargs = super().get_form_kwargs()
+        print("--- form kwargs ---")
         print(kwargs)
+        print("--- ---")
         return kwargs
 
     def form_valid(self, form: BaseModelForm) -> HttpResponse:
