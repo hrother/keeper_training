@@ -87,7 +87,7 @@ class TestTrainingSessionDetailView:
 
         assert response.status_code == 200
         assert response.context_data["ordered_drills"] == [
-            (sd1.drill, sd1.order),
-            (sd2.drill, sd2.order),
-            (sd3.drill, sd3.order),
+            sd1.drill,
+            sd2.drill,
+            sd3.drill,
         ]
