@@ -30,7 +30,7 @@ class TrainingSessionForm(forms.ModelForm):
                     "{% endif %}"
                     "{% for drill in ordered_drills %}"
                     "<div class='col mb-4' data-id='{{drill.pk}}'>"
-                    "{% include 'drills/_drill.html' %}"
+                    "{% include 'drills/_drill_small.html' %}"
                     "</div>"
                     "{% endfor %}"
                 ),
