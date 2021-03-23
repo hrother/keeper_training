@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import DetailView
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView
@@ -6,23 +7,23 @@ from django.views.generic.edit import UpdateView
 from .models import Drill
 
 
-class DrillListView(ListView):
+class DrillListView(LoginRequiredMixin, ListView):
     model = Drill
     allow_empty = True
 
 
-class DrillDetailView(DetailView):
+class DrillDetailView(LoginRequiredMixin, DetailView):
     model = Drill
 
 
-class DrillCreateView(CreateView):
+class DrillCreateView(LoginRequiredMixin, CreateView):
     model = Drill
-    fields = ("name", "description", "image")
+    fields = ("name", "description", "image", "duration")
 
 
-class DrillUpdateView(UpdateView):
+class DrillUpdateView(LoginRequiredMixin, UpdateView):
     model = Drill
-    fields = ("name", "description", "image")
+    fields = ("name", "description", "image", "duration")
 
 
 drill_list_view = DrillListView.as_view()

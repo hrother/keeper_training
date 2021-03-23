@@ -2,6 +2,7 @@ import typing
 
 from autoslug import AutoSlugField
 from django.db import models
+from django.db.models.fields import DurationField
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from model_utils.models import TimeStampedModel
@@ -10,10 +11,11 @@ from model_utils.models import TimeStampedModel
 class Drill(TimeStampedModel):
     """A drill"""
 
-    name = models.CharField(_("Name of Drill"), max_length=150)
+    name = models.CharField(_("Name of Drill"), max_length=150, unique=True)
     slug = AutoSlugField(populate_from="name")
     description = models.TextField(null=True, blank=True)
     image = models.ImageField(null=True, blank=True)
+    duration = DurationField(null=True, blank=True)
 
     @property
     def image_url(self) -> typing.Optional[str]:
