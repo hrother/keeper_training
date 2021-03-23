@@ -1,0 +1,19 @@
+{% load i18n %}
+<div class="card h-100 d-print-inline-block" style='break-inside: avoid;'>
+    <div class="card-header">
+        <div class="row">
+            <div class="col">
+                <h5 class="card-title">{{drill.name}}</h5>
+            </div>
+        </div>
+    </div>
+    <img src="{{drill.image_url|default_if_none:'#' }}" class="card-img-top" alt="Image of drill">
+    <hr>
+    <div class="card-body">
+        <p class="card-text">{{drill.description |linebreaks}}</p>
+    </div>
+    <div class="card-footer">
+        <small class="text-muted">{% trans "Duration:" %}
+            {{ drill.duration }}</small>
+    </div>
+</div>

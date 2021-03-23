@@ -19,10 +19,13 @@
         </h2>
     </div>
     <br>
+    <div class="d-print-none">
+        <p>Reorder drills by dragging.</p>
+    </div>
     <div id="drill-grid" class="row row-cols-1 row-cols-md-2">
         {% for drill in ordered_drills %}
         <div class="col mb-4 " data-id="{{drill.pk}}">
-            {% include "drills/_drill.html" %}
+            {% include "drills/_drill_static.html" %}
         </div>
         {% endfor %}
     </div>
