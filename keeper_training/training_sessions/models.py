@@ -27,9 +27,9 @@ class SessionDrills(models.Model):
     """Through model allowing for ordering."""
 
     session = models.ForeignKey(
-        "training_sessions.TrainingSession", on_delete=models.PROTECT
+        "training_sessions.TrainingSession", on_delete=models.CASCADE
     )
-    drill = models.ForeignKey("drills.Drill", on_delete=models.PROTECT)
+    drill = models.ForeignKey("drills.Drill", on_delete=models.CASCADE)
     order = models.IntegerField(default=99)
 
     class Meta:
