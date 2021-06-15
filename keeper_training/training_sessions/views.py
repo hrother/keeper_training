@@ -31,6 +31,7 @@ class TrainingSessionListView(LoginRequiredMixin, ListView):
             .get_queryset()
             .select_related("coach")
             .prefetch_related("sessiondrills_set__drill")
+            .order_by("-date")
         )
         qs = qs.filter(coach=self.request.user)
         return qs
