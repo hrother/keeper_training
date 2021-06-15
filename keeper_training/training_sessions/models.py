@@ -1,3 +1,5 @@
+import datetime
+
 from django.conf import settings
 from django.db import models
 from django.urls import reverse
@@ -22,14 +24,20 @@ class TrainingSession(TimeStampedModel):
     def get_update_url(self) -> str:
         return reverse("sessions:update", kwargs={"pk": self.pk})
 
+    def duration(self):
+        """Total duration of session."""
+        return sum(
+            (drill.duration for drill in self.drills.all()), datetime.timedelta()
+        )
+
 
 class SessionDrills(models.Model):
     """Through model allowing for ordering."""
 
     session = models.ForeignKey(
-        "training_sessions.TrainingSession", on_delete=models.PROTECT
+        "training_sessions.TrainingSession", on_delete=models.CASCADE
     )
-    drill = models.ForeignKey("drills.Drill", on_delete=models.PROTECT)
+    drill = models.ForeignKey("drills.Drill", on_delete=models.CASCADE)
     order = models.IntegerField(default=99)
 
     class Meta:

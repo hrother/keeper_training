@@ -1,3 +1,4 @@
+import datetime
 import typing
 
 from autoslug import AutoSlugField
@@ -15,7 +16,7 @@ class Drill(TimeStampedModel):
     slug = AutoSlugField(populate_from="name")
     description = models.TextField(null=True, blank=True)
     image = models.ImageField(null=True, blank=True)
-    duration = DurationField(null=True, blank=True)
+    duration = DurationField(null=True, blank=True, default=datetime.timedelta())
 
     @property
     def image_url(self) -> typing.Optional[str]:
