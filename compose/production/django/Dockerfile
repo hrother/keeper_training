@@ -1,40 +1,82 @@
 
-FROM python:3.8-slim-bookworm
+# define an alias for the specific python version used in this file.
+FROM ghcr.io/astral-sh/uv:python3.13-bookworm-slim AS python-build-stage
 
-ENV PYTHONUNBUFFERED 1
+ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy UV_PYTHON_DOWNLOADS=0
 
-RUN apt-get update \
+ARG APP_HOME=/app
+
+WORKDIR ${APP_HOME}
+
+# Install apt packages
+RUN apt-get update && apt-get install --no-install-recommends -y \
   # dependencies for building Python packages
-  && apt-get install -y build-essential \
-  # psycopg2 dependencies
-  && apt-get install -y libpq-dev \
-  # Translations dependencies
-  && apt-get install -y gettext \
-  # cleaning up unused files
-  && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
-  && rm -rf /var/lib/apt/lists/*
+  build-essential \
+  # psycopg dependencies
+  libpq-dev
 
-RUN addgroup --system django \
-    && adduser --system --ingroup django django
 
 # Requirements are installed here to ensure they will be cached.
-COPY ./requirements /requirements
-RUN pip install --no-cache-dir -r /requirements/production.txt \
-    && rm -rf /requirements
+RUN --mount=type=cache,target=/root/.cache/uv \
+    --mount=type=bind,source=uv.lock,target=uv.lock \
+    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+    uv sync --locked --no-install-project --no-dev
+COPY . ${APP_HOME}
 
-COPY ./compose/production/django/entrypoint /entrypoint
+RUN --mount=type=cache,target=/root/.cache/uv \
+    --mount=type=bind,source=uv.lock,target=uv.lock \
+    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+    uv sync --locked --no-dev
+
+# Python 'run' stage
+FROM python:3.13-slim-bookworm AS python-run-stage
+
+ARG APP_HOME=/app
+
+WORKDIR ${APP_HOME}
+
+RUN addgroup --system django \
+  && adduser --system --ingroup django django
+
+
+# Install required system dependencies
+RUN apt-get update && apt-get install --no-install-recommends -y \
+  # psycopg dependencies
+  libpq-dev \
+  # Translations dependencies
+  gettext \
+  # entrypoint
+ \
+  # cleaning up unused files
+  wait-for-it  && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
+  && rm -rf /var/lib/apt/lists/*
+
+
+COPY --chown=django:django ./compose/production/django/entrypoint /entrypoint
 RUN sed -i 's/\r$//g' /entrypoint
 RUN chmod +x /entrypoint
-RUN chown django /entrypoint
 
-COPY ./compose/production/django/start /start
+
+COPY --chown=django:django ./compose/production/django/start /start
 RUN sed -i 's/\r$//g' /start
 RUN chmod +x /start
-RUN chown django /start
-COPY --chown=django:django . /app
+
+
+# Copy the application from the builder
+COPY --from=python-build-stage --chown=django:django ${APP_HOME} ${APP_HOME}
+# explicitly create the media folder before changing ownership below
+RUN mkdir -p ${APP_HOME}/keeper_training/media
+
+# make django owner of the WORKDIR directory as well.
+RUN chown django:django ${APP_HOME}
+
+# Place executables in the environment at the front of the path
+ENV PATH="/app/.venv/bin:$PATH"
 
 USER django
 
-WORKDIR /app
+RUN DATABASE_URL="" \
+  DJANGO_SETTINGS_MODULE="config.settings.test" \
+  python manage.py compilemessages
 
 ENTRYPOINT ["/entrypoint"]

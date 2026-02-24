@@ -1,4 +1,5 @@
 """Tests for training_sessions urls."""
+
 from django.urls import resolve
 from django.urls import reverse
 

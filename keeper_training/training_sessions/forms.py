@@ -1,7 +1,7 @@
 from crispy_forms.helper import FormHelper
+from crispy_forms.layout import HTML
 from crispy_forms.layout import Div
 from crispy_forms.layout import Field
-from crispy_forms.layout import HTML
 from crispy_forms.layout import Layout
 from crispy_forms.layout import Submit
 from django import forms
@@ -32,7 +32,7 @@ class TrainingSessionForm(forms.ModelForm):
                     "<div class='col mb-4' data-id='{{drill.pk}}'>"
                     "{% include 'drills/_drill_static.html' %}"
                     "</div>"
-                    "{% endfor %}"
+                    "{% endfor %}",
                 ),
                 id="selected-drills",
                 css_class="row row-cols-1 row-cols-md-2 bg-light m-3",

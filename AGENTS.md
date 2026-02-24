@@ -4,44 +4,32 @@
 
 - **Type**: Django web application (Cookiecutter Django template)
 - **Purpose**: Plan and manage goalkeeper training sessions
-- **Python**: 3.8+ | **Django**: 3.2+
+- **Python**: 3.13 | **Django**: 3.2+
 
 ## Tech Stack
 
 - Django 3.2+ with Django REST Framework
-- PostgreSQL, pytest, factory-boy
+- PostgreSQL 18, pytest, factory-boy, uv
 
 ---
 
 ## Running the Application
 
-### Local Development (Docker)
-
 ```bash
 # Build and run the stack
-docker compose -f local.yml up
+docker compose -f docker-compose.local.yml up
 
 # Rebuild (after adding dependencies)
-docker compose -f local.yml up -d --build
+docker compose -f docker-compose.local.yml up -d --build
 
 # Run management commands
-docker compose -f local.yml run --rm django python manage.py migrate
-docker compose -f local.yml run --rm django python manage.py createsuperuser
-docker compose -f local.yml run --rm django python manage.py shell
+docker compose -f docker-compose.local.yml run --rm django python manage.py migrate
+docker compose -f docker-compose.local.yml run --rm django python manage.py createsuperuser
+docker compose -f docker-compose.local.yml run --rm django python manage.py shell
 
 # Run tests inside container
-docker compose -f local.yml run --rm django pytest
-docker compose -f local.yml run --rm django pytest keeper_training/users/tests/test_models.py::test_user_get_absolute_url
-```
-
-### Local Development (No Docker)
-
-```bash
-# Run development server
-python manage.py runserver
-
-# Create superuser
-python manage.py createsuperuser
+docker compose -f docker-compose.local.yml run --rm django pytest
+docker compose -f docker-compose.local.yml run --rm django pytest keeper_training/users/tests/test_models.py::test_user_get_absolute_url
 ```
 
 ---
@@ -50,20 +38,20 @@ python manage.py createsuperuser
 
 ```bash
 # Run all tests
-pytest
+docker compose -f docker-compose.local.yml run --rm django pytest
 
 # Run a single test file
-pytest keeper_training/users/tests/test_models.py
+docker compose -f docker-compose.local.yml run --rm django pytest keeper_training/users/tests/test_models.py
 
 # Run a specific test
-pytest keeper_training/users/tests/test_models.py::test_user_get_absolute_url
+docker compose -f docker-compose.local.yml run --rm django pytest keeper_training/users/tests/test_models.py::test_user_get_absolute_url
 
 # Run tests matching a pattern
-pytest -k "test_user"
+docker compose -f docker-compose.local.yml run --rm django pytest -k "test_user"
 
 # Run with coverage
-coverage run -m pytest
-coverage html
+docker compose -f docker-compose.local.yml run --rm django coverage run -m pytest
+docker compose -f docker-compose.local.yml run --rm django coverage html
 ```
 
 ---
@@ -75,10 +63,9 @@ coverage html
 pre-commit run --all-files
 
 # Individual linters
-black keeper_training/
-flake8 keeper_training/
+ruff check keeper_training/
+ruff format keeper_training/
 mypy keeper_training
-pylint keeper_training/
 ```
 
 ---
@@ -88,7 +75,7 @@ pylint keeper_training/
 ### General
 
 - **Line Length**: 120 characters max
-- **Formatting**: Black, Import order: `reorder-python-imports`
+- **Formatting**: Ruff
 - **Docstrings**: Google-style
 
 ### Imports
@@ -147,7 +134,7 @@ def test_user_get_absolute_url(user: User):
 
 ## Pre-commit Hooks
 
-Hooks: trailing-whitespace, end-of-file-fixer, check-yaml, reorder-python-imports, black, flake8
+Hooks: trailing-whitespace, end-of-file-fixer, check-yaml, reorder-python-imports, ruff
 
 Install: `pre-commit install`
 
@@ -166,4 +153,3 @@ Install: `pre-commit install`
 
 - Database reused across test runs (`--reuse-db` in pytest.ini)
 - MEDIA_ROOT set to tmpdir for tests (`keeper_training/conftest.py`)
-- Migrations ignored by mypy and flake8

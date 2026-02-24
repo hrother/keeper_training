@@ -27,7 +27,8 @@ class TrainingSession(TimeStampedModel):
     def duration(self):
         """Total duration of session."""
         return sum(
-            (drill.duration for drill in self.drills.all()), datetime.timedelta()
+            (drill.duration for drill in self.drills.all()),
+            datetime.timedelta(),
         )
 
 
@@ -35,7 +36,8 @@ class SessionDrills(models.Model):
     """Through model allowing for ordering."""
 
     session = models.ForeignKey(
-        "training_sessions.TrainingSession", on_delete=models.CASCADE
+        "training_sessions.TrainingSession",
+        on_delete=models.CASCADE,
     )
     drill = models.ForeignKey("drills.Drill", on_delete=models.CASCADE)
     order = models.IntegerField(default=99)

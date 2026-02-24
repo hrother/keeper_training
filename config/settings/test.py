@@ -1,6 +1,7 @@
 """
 With these settings, tests run faster.
 """
+
 from .base import *  # noqa
 from .base import env
 
@@ -21,7 +22,7 @@ CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
         "LOCATION": "",
-    }
+    },
 }
 
 # PASSWORDS
@@ -38,7 +39,7 @@ TEMPLATES[-1]["OPTIONS"]["loaders"] = [  # type: ignore[index] # noqa F405
             "django.template.loaders.filesystem.Loader",
             "django.template.loaders.app_directories.Loader",
         ],
-    )
+    ),
 ]
 
 # EMAIL
