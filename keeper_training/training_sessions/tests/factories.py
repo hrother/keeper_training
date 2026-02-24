@@ -1,4 +1,5 @@
 """Factories for training_sessions tests."""
+
 import factory
 from factory.django import DjangoModelFactory
 

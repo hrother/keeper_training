@@ -1,7 +1,7 @@
 volumes:
-  production_postgres_data: {}
-  production_postgres_data_backups: {}
-  production_traefik: {}
+  keeper_training_production_postgres_data: {}
+  keeper_training_production_postgres_data_backups: {}
+  keeper_training_production_traefik: {}
 
 services:
   django:
@@ -23,8 +23,8 @@ services:
       dockerfile: ./compose/production/postgres/Dockerfile
     image: keeper_training_production_postgres
     volumes:
-      - production_postgres_data:/var/lib/postgresql/data
-      - production_postgres_data_backups:/backups
+      - keeper_training_production_postgres_data:/var/lib/postgresql/18/docker
+      - keeper_training_production_postgres_data_backups:/backups
     env_file:
       - ./.envs/.production/.postgres
 
@@ -36,10 +36,10 @@ services:
     depends_on:
       - django
     volumes:
-      - production_traefik:/etc/traefik/acme
+      - keeper_training_production_traefik:/etc/traefik/acme
     ports:
       - "0.0.0.0:80:80"
       - "0.0.0.0:443:443"
 
   redis:
-    image: redis:5.0
+    image: redis:7.2

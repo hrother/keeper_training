@@ -1,23 +1,23 @@
 {% extends "base.html" %}
+
 {% load i18n %}
+
 {% block title %}Drills{% endblock %}
-
 {% block content %}
-<div class="container">
+  <div class="container">
     <div class="row">
-        <div class="col">
-            <h1>Drills</h1>
-        </div>
-        <div class="col"><a href="{% url 'drills:add' %}" class="btn btn-success float-right">New</a></div>
-
+      <div class="col">
+        <h1>Drills</h1>
+      </div>
+      <div class="col">
+        <a href="{% url 'drills:add' %}" class="btn btn-success float-right">New</a>
+      </div>
     </div>
-    <hr>
+    <hr />
     <div class="row row-cols-1 row-cols-md-3">
-        {% for drill in drill_list %}
-        <div class="col mb-4">
-            {% include "drills/_drill.html" %}
-        </div>
-        {% endfor %}
+      {% for drill in drill_list %}
+        <div class="col mb-4">{% include "drills/_drill.html" %}</div>
+      {% endfor %}
     </div>
-</div>
+  </div>
 {% endblock content %}

@@ -8,9 +8,9 @@ class SessionDrillsInline(admin.TabularInline):
     model = SessionDrills
 
 
+@admin.register(TrainingSession)
 class TrainingSessionAdmin(admin.ModelAdmin):
     inlines = (SessionDrillsInline,)
 
 
-admin.site.register(TrainingSession, TrainingSessionAdmin)
 # admin.site.register(SessionDrillsInline)

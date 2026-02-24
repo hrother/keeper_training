@@ -1,6 +1,5 @@
 import json
 from typing import Any
-from typing import Dict
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import models
@@ -15,10 +14,11 @@ from django.views.generic import ListView
 from django.views.generic import UpdateView
 from django.views.generic.base import View
 
-from .models import SessionDrills
-from .models import TrainingSession
 from keeper_training.drills.models import Drill
 from keeper_training.training_sessions.forms import TrainingSessionForm
+
+from .models import SessionDrills
+from .models import TrainingSession
 
 
 class TrainingSessionListView(LoginRequiredMixin, ListView):
@@ -41,7 +41,7 @@ class TrainingSessionCreateView(LoginRequiredMixin, CreateView):
     model = TrainingSession
     form_class = TrainingSessionForm
 
-    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         ctx = super().get_context_data(**kwargs)
         ctx["action"] = "Create"
         ctx["all_drills"] = Drill.objects.all()
@@ -56,14 +56,14 @@ class TrainingSessionUpdateView(LoginRequiredMixin, UpdateView):
     model = TrainingSession
     form_class = TrainingSessionForm
 
-    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         ctx = super().get_context_data(**kwargs)
         ctx["action"] = "Update"
         ctx["ordered_drills"] = [
             sd.drill for sd in ctx["object"].sessiondrills_set.all()
         ]
         ctx["all_drills"] = Drill.objects.exclude(
-            pk__in=[d.pk for d in ctx["ordered_drills"]]
+            pk__in=[d.pk for d in ctx["ordered_drills"]],
         )
         return ctx
 
@@ -78,7 +78,7 @@ class TrainingSessionDetailView(LoginRequiredMixin, DetailView):
     def get_queryset(self) -> models.query.QuerySet:
         return super().get_queryset().prefetch_related("sessiondrills_set__drill")
 
-    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context["ordered_drills"] = [
             sd.drill for sd in context["object"].sessiondrills_set.all()
@@ -99,8 +99,7 @@ class TrainingSessionReorderView(LoginRequiredMixin, View):
                 sd.order = idx
                 sd.save()
             return JsonResponse({"success": True}, status=200)
-        else:
-            return JsonResponse({"success": False}, status=400)
+        return JsonResponse({"success": False}, status=400)
 
 
 training_session_list_view = TrainingSessionListView.as_view()
