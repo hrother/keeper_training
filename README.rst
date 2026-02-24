@@ -10,6 +10,15 @@ Plan and manage goalkeeper training sessions
      :target: https://github.com/ambv/black
      :alt: Black code style
 
+About This Project
+------------------
+
+This project was originally created to learn how to build a Django application while solving a practical problem I had at the time: planning goalkeeper training sessions I was giving. The goal was to better organize and structure those sessions.
+
+Since I am no longer an active goalkeeper trainer, the project has been dormant for some time.
+
+I am reviving it now to experiment with coding agents. The goal is to see how well agents can update an old code base. This includes updating dependencies and adopting new tools and best practices.
+
 
 Settings
 --------
