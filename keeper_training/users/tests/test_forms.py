@@ -16,7 +16,7 @@ class TestUserCreationForm:
                 "username": proto_user.username,
                 "password1": proto_user._password,
                 "password2": proto_user._password,
-            }
+            },
         )
 
         assert form.is_valid()
@@ -32,7 +32,7 @@ class TestUserCreationForm:
                 "username": proto_user.username,
                 "password1": proto_user._password,
                 "password2": proto_user._password,
-            }
+            },
         )
 
         assert not form.is_valid()

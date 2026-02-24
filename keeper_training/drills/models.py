@@ -1,5 +1,4 @@
 import datetime
-import typing
 
 from autoslug import AutoSlugField
 from django.db import models
@@ -19,7 +18,7 @@ class Drill(TimeStampedModel):
     duration = DurationField(null=True, blank=True, default=datetime.timedelta())
 
     @property
-    def image_url(self) -> typing.Optional[str]:
+    def image_url(self) -> str | None:
         if self.image:
             return self.image.url
         return None
