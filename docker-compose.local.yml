@@ -1,6 +1,6 @@
 volumes:
-  local_postgres_data: {}
-  local_postgres_data_backups: {}
+  keeper_training_local_postgres_data: {}
+  keeper_training_local_postgres_data_backups: {}
 
 services:
   django:
@@ -8,16 +8,17 @@ services:
       context: .
       dockerfile: ./compose/local/django/Dockerfile
     image: keeper_training_local_django
-    container_name: django
+    container_name: keeper_training_local_django
     depends_on:
       - postgres
     volumes:
-      - .:/app
+      - /app/.venv
+      - .:/app:z
     env_file:
       - ./.envs/.local/.django
       - ./.envs/.local/.postgres
     ports:
-      - "8000:8000"
+      - '8000:8000'
     command: /start
 
   postgres:
@@ -25,16 +26,16 @@ services:
       context: .
       dockerfile: ./compose/production/postgres/Dockerfile
     image: keeper_training_production_postgres
-    container_name: postgres
+    container_name: keeper_training_local_postgres
     volumes:
-      - local_postgres_data:/var/lib/postgresql/data
-      - local_postgres_data_backups:/backups
+      - keeper_training_local_postgres_data:/var/lib/postgresql/18/docker
+      - keeper_training_local_postgres_data_backups:/backups
     env_file:
       - ./.envs/.local/.postgres
 
   docs:
     image: keeper_training_local_docs
-    container_name: docs
+    container_name: keeper_training_local_docs
     build:
       context: .
       dockerfile: ./compose/local/docs/Dockerfile
@@ -45,4 +46,4 @@ services:
       - ./config:/app/config
       - ./keeper_training:/app/keeper_training
     ports:
-      - "7000:7000"
+      - '7000:7000'
