@@ -9,7 +9,8 @@ pytestmark = pytest.mark.django_db
 def test_absolute_url(drill: Drill) -> None:
     """It returns the absolute url."""
     assert drill.get_absolute_url() == reverse(
-        "drills:detail", kwargs={"slug": drill.slug}
+        "drills:detail",
+        kwargs={"slug": drill.slug},
     )
 
 

@@ -30,10 +30,14 @@ class TestTrainingSessionView:
 
 class TestTrainingSessionCreateView:
     def test_sets_user_as_coach(
-        self, user: User, rf: RequestFactory, drill: Drill
+        self,
+        user: User,
+        rf: RequestFactory,
+        drill: Drill,
     ) -> None:
         request = rf.post(
-            "/fake-url/", data={"drills": [drill.id], "date": "2020-12-28"}
+            "/fake-url/",
+            data={"drills": [drill.id], "date": "2020-12-28"},
         )
         request.user = user
         training_session_create_view.request = request
@@ -48,7 +52,10 @@ class TestTrainingSessionCreateView:
 
 class TestTrainingSessionUpdateView:
     def test_updates_session(
-        self, user: User, rf: RequestFactory, drill: Drill
+        self,
+        user: User,
+        rf: RequestFactory,
+        drill: Drill,
     ) -> None:
         session = TrainingSessionFactory(coach=user, drills=[drill])
         new_drill = DrillFactory()
@@ -71,13 +78,19 @@ class TestTrainingSessionDetailView:
     def test_contains_ordered_drills(self, user: User, rf: RequestFactory) -> None:
         session = TrainingSessionFactory(coach=user)
         sd2 = SessionDrills.objects.create(
-            session=session, drill=DrillFactory(name="D2"), order=2
+            session=session,
+            drill=DrillFactory(name="D2"),
+            order=2,
         )
         sd1 = SessionDrills.objects.create(
-            session=session, drill=DrillFactory(name="D1"), order=1
+            session=session,
+            drill=DrillFactory(name="D1"),
+            order=1,
         )
         sd3 = SessionDrills.objects.create(
-            session=session, drill=DrillFactory(name="D3"), order=3
+            session=session,
+            drill=DrillFactory(name="D3"),
+            order=3,
         )
         request = rf.get("/fake-url/", pk=session.pk)
         request.user = user
